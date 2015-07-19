@@ -13,22 +13,12 @@ var KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE = "b";
 chrome.contextMenus.create({
 	id: KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE,
 	title: "一覧（オプション無し）",
-	contexts: ["browser_action"],
-	onclick: function (info, tab){
-		chrome.tabs.create({
-			url: "chrome://extensions/"
-		});
-	}
+	contexts: ["browser_action"]
 });
 chrome.contextMenus.create({
 	id: KEY_ID_CONTEXT_MENU_ALL,
 	title: "一覧（ALL）",
-	contexts: ["browser_action"],
-	onclick: function (info, tab){
-		chrome.tabs.create({
-			url: "chrome://extensions/"
-		});
-	}
+	contexts: ["browser_action"]
 });
 
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(function (value){
@@ -55,7 +45,6 @@ chrome.management.getAll(function (list){
 				title: extensionInfo.shortName,
 				contexts: ["browser_action"],
 				onclick: function (info, tab){
-					console.log(extensionInfo);
 					chrome.tabs.create({
 						url: "chrome://extensions/?id=" + extensionInfo.id
 					});
@@ -67,7 +56,6 @@ chrome.management.getAll(function (list){
 					title: extensionInfo.shortName,
 					contexts: ["browser_action"],
 					onclick: function (info, tab){
-						console.log(extensionInfo);
 						chrome.tabs.create({
 							url: "chrome://extensions/?id=" + extensionInfo.id
 						});
