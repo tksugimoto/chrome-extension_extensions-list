@@ -1,0 +1,27 @@
+{
+	"name": "拡張ボタン表示",
+	"version": "0.1",
+	"manifest_version": 2,
+
+	"description": "拡張ページを表示するボタンを作成",
+
+	"icons": {
+		"128": "icon/icon.png"
+	},
+	"permissions": [
+		"management",
+		"contextMenus"
+	],
+
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+//		,"persistent": false
+	},
+
+	"browser_action": {
+		"default_icon": "icon/icon.png",
+		"default_title": "拡張ボタン表示"
+	}
+}
