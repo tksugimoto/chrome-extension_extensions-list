@@ -1,13 +1,6 @@
 
 
 
-chrome.browserAction.onClicked.addListener(function (){
-	chrome.tabs.create({
-		url: "chrome://extensions/"
-	});
-});
-
-
 var KEY_ID_CONTEXT_MENU_ALL = "a";
 var KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE = "b";
 
@@ -44,6 +37,16 @@ function createMenu (){
 				if (a.shortName > b.shortName) return 1;
 				if (a.shortName < b.shortName) return -1;
 				return 0;
+			});
+			
+			chrome.contextMenus.create({
+				title: "拡張ページを表示",
+				contexts: ["browser_action"],
+				onclick: function (){
+					chrome.tabs.create({
+						url: "chrome://extensions/"
+					});
+				}
 			});
 			
 			chrome.contextMenus.create({
