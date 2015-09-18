@@ -10,8 +10,9 @@ chrome.management.getAll(function(list) {
         return 0;
     });
     
+    var matchedExtensions = [];
     function showCandidate(word) {
-        var matchedExtensions = [];
+        matchedExtensions = [];
         list.forEach(function (extensionInfo){
             var name = extensionInfo.name;
             if ((name + "\n" + extensionInfo.description).toLowerCase().indexOf(word) !== -1) {
@@ -28,6 +29,9 @@ chrome.management.getAll(function(list) {
                 matchedExtensions.push(extensionInfo.id);
             }
         });
+    }
+    
+    function openIfNarrowOnlyOne() {
         if (matchedExtensions.length === 1) {
             chrome.tabs.create({
                 url: "chrome://extensions/?id=" + matchedExtensions[0]
@@ -35,10 +39,30 @@ chrome.management.getAll(function(list) {
         }
     }
     
+    var checkTransformationDecided = {
+    	clear: function (){
+    		window.clearTimeout(this.id);
+    	},
+    	start: function (){
+    		this.clear();
+    		this.id = window.setTimeout(openIfNarrowOnlyOne, 150);
+    	}
+	};
+    
+    searchExtension.onkeydown = function(evt) {
+    	// 日本語変換確定のEnterはkeydown(229)だけイベントが発生してkeyupは発生しない
+    	window.setTimeout(function (){
+	        var word = searchExtension.value.toLowerCase();
+	        container.innerText = "";
+	    	// console.log("onkeydown", evt.keyCode, word);
+	        showCandidate(word);
+	        if (evt.keyCode === 229) checkTransformationDecided.start();
+	        else openIfNarrowOnlyOne();
+	    }, 1);
+    };
     searchExtension.onkeyup = function(evt) {
-        var word = this.value.toLowerCase();
-        container.innerText = "";
-        showCandidate(word);
+    	// console.log("onkeyup", evt.keyCode);
+    	checkTransformationDecided.clear();
     };
     
     // 初回表示時
