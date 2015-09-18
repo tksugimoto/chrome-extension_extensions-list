@@ -1,7 +1,7 @@
 var container = document.getElementById("container");
 
-var searchExtension = document.getElementById("search-extension");
-searchExtension.focus();
+var searchExtensionInput = document.getElementById("search-extension");
+searchExtensionInput.focus();
 
 chrome.management.getAll(function(list) {
     list.sort(function(a, b) {
@@ -49,10 +49,10 @@ chrome.management.getAll(function(list) {
     	}
 	};
     
-    searchExtension.onkeydown = function(evt) {
+    searchExtensionInput.onkeydown = function(evt) {
     	// 日本語変換確定のEnterはkeydown(229)だけイベントが発生してkeyupは発生しない
     	window.setTimeout(function (){
-	        var word = searchExtension.value.toLowerCase();
+	        var word = searchExtensionInput.value.toLowerCase();
 	        container.innerText = "";
 	    	// console.log("onkeydown", evt.keyCode, word);
 	        showCandidate(word);
@@ -60,7 +60,7 @@ chrome.management.getAll(function(list) {
 	        else openIfNarrowOnlyOne();
 	    }, 1);
     };
-    searchExtension.onkeyup = function(evt) {
+    searchExtensionInput.onkeyup = function(evt) {
     	// console.log("onkeyup", evt.keyCode);
     	checkTransformationDecided.clear();
     };
