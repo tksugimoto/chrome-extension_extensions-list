@@ -50,6 +50,8 @@ chrome.management.getAll(function(list) {
 	};
     
     searchExtensionInput.onkeydown = function(evt) {
+		// tabキーの場合
+		if (evt.keyCode === 9) return;
     	// 日本語変換確定のEnterはkeydown(229)だけイベントが発生してkeyupは発生しない
     	window.setTimeout(function (){
 	        var word = searchExtensionInput.value.toLowerCase();
