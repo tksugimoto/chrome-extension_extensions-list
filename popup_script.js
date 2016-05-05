@@ -25,6 +25,11 @@ chrome.management.getAll(function(list) {
 						url: "chrome://extensions/?id=" + extensionInfo.id
 					});
 				};
+				if (!extensionInfo.enabled) {
+					elem.style.color = "gray";
+					elem.style.textDecoration = "line-through";
+					elem.title = "無効";
+				}
 				container.appendChild(elem);
 				matchedExtensions.push(extensionInfo.id);
 			}
