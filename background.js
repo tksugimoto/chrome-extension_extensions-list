@@ -3,9 +3,12 @@
 
 var KEY_ID_CONTEXT_MENU_ALL = "a";
 var KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE = "b";
+var KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE = "c";
 
 
-createMenu();
+chrome.runtime.onInstalled.addListener(readyToCreate);
+chrome.runtime.onStartup.addListener(readyToCreate);
+
 chrome.management.onInstalled.addListener(function (extensionInfo){
 	console.log("onInstalled: " + extensionInfo.name);
 	readyToCreate();
@@ -31,6 +34,12 @@ function readyToCreate(){
 	timeoutId = window.setTimeout(createMenu, 100);
 }
 function createMenu (){
+	var count = (function () {
+		var i = 0;
+		return function () {
+			return i++;
+		}
+	})();
 	chrome.contextMenus.removeAll(function (){
 		chrome.management.getAll(function (list){
 			list.sort(function (a, b){
@@ -42,11 +51,7 @@ function createMenu (){
 			chrome.contextMenus.create({
 				title: "拡張ページを表示",
 				contexts: ["browser_action"],
-				onclick: function (){
-					chrome.tabs.create({
-						url: "chrome://extensions/"
-					});
-				}
+				id: KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE
 			});
 			
 			chrome.contextMenus.create({
@@ -61,11 +66,7 @@ function createMenu (){
 								parentId: KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE,
 								title: extensionInfo.shortName,
 								contexts: ["browser_action"],
-								onclick: function (info, tab){
-									chrome.tabs.create({
-										url: "chrome://extensions/?id=" + extensionInfo.id
-									});
-								}
+								id: "EXT_" + extensionInfo.id + "_" + count()
 							});
 						}
 					}
@@ -82,11 +83,7 @@ function createMenu (){
 							parentId: KEY_ID_CONTEXT_MENU_ALL,
 							title: extensionInfo.shortName,
 							contexts: ["browser_action"],
-							onclick: function (info, tab){
-								chrome.tabs.create({
-									url: "chrome://extensions/?id=" + extensionInfo.id
-								});
-							}
+							id: "EXT_" + extensionInfo.id + "_" + count()
 						});
 					}
 				});
@@ -94,3 +91,16 @@ function createMenu (){
 		});
 	});
 }
+
+chrome.contextMenus.onClicked.addListener(function (info) {
+	if (info.menuItemId === KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE) {
+		chrome.tabs.create({
+			url: "chrome://extensions/"
+		});
+	} else if (info.menuItemId.match(/^EXT_([a-z]+)_/)) {
+		var extensionId = RegExp.$1;
+		chrome.tabs.create({
+			url: "chrome://extensions/?id=" + extensionId
+		});
+	}
+});
