@@ -21,6 +21,12 @@ chrome.management.getAll(function(list) {
 			});
 		};
 		elem.onclick = openExtensionPage;
+		elem.addEventListener("keydown", evt => {
+			if (evt.key === " ") {
+				// Spaceキーでも開く
+				openExtensionPage();
+			}
+		});
 		if (!extensionInfo.enabled) {
 			elem.style.color = "gray";
 			elem.style.textDecoration = "line-through";
