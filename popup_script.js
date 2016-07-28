@@ -15,11 +15,12 @@ chrome.management.getAll(function(list) {
 		elem.innerText = extensionInfo.name;
 		elem.href = "#";
 		elem.style.display = "block";
-		elem.onclick = function (){
+		const openExtensionPage = () => {
 			chrome.tabs.create({
 				url: "chrome://extensions/?id=" + extensionInfo.id
 			});
 		};
+		elem.onclick = openExtensionPage;
 		if (!extensionInfo.enabled) {
 			elem.style.color = "gray";
 			elem.style.textDecoration = "line-through";
