@@ -86,9 +86,4 @@ chrome.management.getAll(extensions => {
 			});
 		}, 1);
 	});
-
-	// 初回表示時
-	showCandidate({
-		word: ""
-	});
 });
