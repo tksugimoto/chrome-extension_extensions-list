@@ -1,17 +1,19 @@
-var container = document.getElementById("container");
+"use strict";
 
-var searchExtensionInput = document.getElementById("search-extension");
+const container = document.getElementById("container");
+
+const searchExtensionInput = document.getElementById("search-extension");
 searchExtensionInput.focus();
 
-chrome.management.getAll(function(list) {
-	list.sort(function(a, b) {
+chrome.management.getAll(list => {
+	list.sort((a, b) => {
 		if (a.shortName > b.shortName) return 1;
 		if (a.shortName < b.shortName) return -1;
 		return 0;
 	});
 
-	list.forEach(function (extensionInfo){
-		var elem = document.createElement("a");
+	list.forEach(extensionInfo => {
+		const elem = document.createElement("a");
 		elem.innerText = extensionInfo.name;
 		elem.href = "#";
 		elem.style.display = "block";
@@ -36,11 +38,11 @@ chrome.management.getAll(function(list) {
 		extensionInfo._elem = elem;
 	});
 
-	var matchedExtensions = [];
+	let matchedExtensions = [];
 	function showCandidate(word) {
 		matchedExtensions = [];
-		list.forEach(function (extensionInfo){
-			var target = extensionInfo.name + "\n" + extensionInfo.description;
+		list.forEach(extensionInfo => {
+			const target = extensionInfo.name + "\n" + extensionInfo.description;
 			if (target.toLowerCase().indexOf(word) !== -1) {
 				extensionInfo._elem.style.display = "block";
 				matchedExtensions.push(extensionInfo.id);
@@ -58,7 +60,7 @@ chrome.management.getAll(function(list) {
 		}
 	}
 
-	var checkTransformationDecided = {
+	const checkTransformationDecided = {
 		clear: function (){
 			window.clearTimeout(this.id);
 		},
@@ -68,19 +70,19 @@ chrome.management.getAll(function(list) {
 		}
 	};
 
-	searchExtensionInput.onkeydown = function(evt) {
+	searchExtensionInput.onkeydown = evt => {
 		// tabキーの場合
 		if (evt.keyCode === 9) return;
 		// 日本語変換確定のEnterはkeydown(229)だけイベントが発生してkeyupは発生しない
-		window.setTimeout(function (){
-			var word = searchExtensionInput.value.toLowerCase();
+		window.setTimeout(() => {
+			const word = searchExtensionInput.value.toLowerCase();
 			// console.log("onkeydown", evt.keyCode, word);
 			showCandidate(word);
 			if (evt.keyCode === 229) checkTransformationDecided.start();
 			else openIfNarrowOnlyOne();
 		}, 1);
 	};
-	searchExtensionInput.onkeyup = function(evt) {
+	searchExtensionInput.onkeyup = evt => {
 		// console.log("onkeyup", evt.keyCode);
 		checkTransformationDecided.clear();
 	};
