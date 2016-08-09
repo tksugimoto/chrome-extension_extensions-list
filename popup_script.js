@@ -5,21 +5,21 @@ const container = document.getElementById("container");
 const searchExtensionInput = document.getElementById("search-extension");
 searchExtensionInput.focus();
 
-chrome.management.getAll(list => {
-	list.sort((a, b) => {
+chrome.management.getAll(extensions => {
+	extensions.sort((a, b) => {
 		if (a.shortName > b.shortName) return 1;
 		if (a.shortName < b.shortName) return -1;
 		return 0;
 	});
 
-	list.forEach(extensionInfo => {
+	extensions.forEach(extension => {
 		const elem = document.createElement("a");
-		elem.innerText = extensionInfo.name;
+		elem.innerText = extension.name;
 		elem.href = "#";
 		elem.style.display = "block";
 		const openExtensionPage = () => {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + extensionInfo.id
+				url: "chrome://extensions/?id=" + extension.id
 			});
 		};
 		elem.onclick = openExtensionPage;
@@ -29,32 +29,32 @@ chrome.management.getAll(list => {
 				openExtensionPage();
 			}
 		});
-		if (!extensionInfo.enabled) {
+		if (!extension.enabled) {
 			elem.style.color = "gray";
 			elem.style.textDecoration = "line-through";
 			elem.title = "無効";
 		}
 		container.appendChild(elem);
-		extensionInfo._elem = elem;
+		extension._elem = elem;
 	});
 
 	function showCandidate({
 		word = searchExtensionInput.value.toLowerCase(),
 		openIfNarrowOnlyOne = false
 	} = {}) {
-		const matchedExtensions = [];
-		list.forEach(extensionInfo => {
-			const target = extensionInfo.name + "\n" + extensionInfo.description;
+		const matchedExtensionIds = [];
+		extensions.forEach(extension => {
+			const target = extension.name + "\n" + extension.description;
 			if (target.toLowerCase().indexOf(word) !== -1) {
-				extensionInfo._elem.style.display = "block";
-				matchedExtensions.push(extensionInfo.id);
+				extension._elem.style.display = "block";
+				matchedExtensionIds.push(extension.id);
 			} else {
-				extensionInfo._elem.style.display = "none";
+				extension._elem.style.display = "none";
 			}
 		});
-		if (openIfNarrowOnlyOne && matchedExtensions.length === 1) {
+		if (openIfNarrowOnlyOne && matchedExtensionIds.length === 1) {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + matchedExtensions[0]
+				url: "chrome://extensions/?id=" + matchedExtensionIds[0]
 			});
 		}
 	}
