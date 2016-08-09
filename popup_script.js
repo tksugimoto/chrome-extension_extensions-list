@@ -38,9 +38,11 @@ chrome.management.getAll(list => {
 		extensionInfo._elem = elem;
 	});
 
-	let matchedExtensions = [];
-	function showCandidate(word) {
-		matchedExtensions = [];
+	function showCandidate({
+		word = searchExtensionInput.value.toLowerCase(),
+		openIfNarrowOnlyOne = false
+	} = {}) {
+		const matchedExtensions = [];
 		list.forEach(extensionInfo => {
 			const target = extensionInfo.name + "\n" + extensionInfo.description;
 			if (target.toLowerCase().indexOf(word) !== -1) {
@@ -50,10 +52,7 @@ chrome.management.getAll(list => {
 				extensionInfo._elem.style.display = "none";
 			}
 		});
-	}
-
-	function openIfNarrowOnlyOne() {
-		if (matchedExtensions.length === 1) {
+		if (openIfNarrowOnlyOne && matchedExtensions.length === 1) {
 			chrome.tabs.create({
 				url: "chrome://extensions/?id=" + matchedExtensions[0]
 			});
@@ -63,16 +62,17 @@ chrome.management.getAll(list => {
 	searchExtensionInput.addEventListener("compositionupdate", () => {
 		// 日本語変換中
 		window.setTimeout(() => {
-			const word = searchExtensionInput.value.toLowerCase();
-			showCandidate(word);
+			showCandidate({
+				openIfNarrowOnlyOne: false
+			});
 		}, 1);
 	});
 	searchExtensionInput.addEventListener("compositionend", () => {
 		// 日本語変換完了・変換キャンセル
 		window.setTimeout(() => {
-			const word = searchExtensionInput.value.toLowerCase();
-			showCandidate(word);
-			openIfNarrowOnlyOne();
+			showCandidate({
+				openIfNarrowOnlyOne: true
+			});
 		}, 1);
 	});
 	searchExtensionInput.addEventListener("keydown", evt => {
@@ -81,12 +81,14 @@ chrome.management.getAll(list => {
 		// 日本語入力中
 		if (evt.keyCode === 229) return;
 		window.setTimeout(() => {
-			const word = searchExtensionInput.value.toLowerCase();
-			showCandidate(word);
-			openIfNarrowOnlyOne();
+			showCandidate({
+				openIfNarrowOnlyOne: true
+			});
 		}, 1);
 	});
 
 	// 初回表示時
-	showCandidate("");
+	showCandidate({
+		word: ""
+	});
 });
