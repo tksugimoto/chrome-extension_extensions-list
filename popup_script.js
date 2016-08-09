@@ -60,32 +60,32 @@ chrome.management.getAll(list => {
 		}
 	}
 
-	const checkTransformationDecided = {
-		clear: function (){
-			window.clearTimeout(this.id);
-		},
-		start: function (){
-			this.clear();
-			this.id = window.setTimeout(openIfNarrowOnlyOne, 150);
-		}
-	};
-
-	searchExtensionInput.onkeydown = evt => {
-		// tabキーの場合
-		if (evt.keyCode === 9) return;
-		// 日本語変換確定のEnterはkeydown(229)だけイベントが発生してkeyupは発生しない
+	searchExtensionInput.addEventListener("compositionupdate", () => {
+		// 日本語変換中
 		window.setTimeout(() => {
 			const word = searchExtensionInput.value.toLowerCase();
-			// console.log("onkeydown", evt.keyCode, word);
 			showCandidate(word);
-			if (evt.keyCode === 229) checkTransformationDecided.start();
-			else openIfNarrowOnlyOne();
 		}, 1);
-	};
-	searchExtensionInput.onkeyup = evt => {
-		// console.log("onkeyup", evt.keyCode);
-		checkTransformationDecided.clear();
-	};
+	});
+	searchExtensionInput.addEventListener("compositionend", () => {
+		// 日本語変換完了・変換キャンセル
+		window.setTimeout(() => {
+			const word = searchExtensionInput.value.toLowerCase();
+			showCandidate(word);
+			openIfNarrowOnlyOne();
+		}, 1);
+	});
+	searchExtensionInput.addEventListener("keydown", evt => {
+		// Tabキー
+		if (evt.keyCode === 9) return;
+		// 日本語入力中
+		if (evt.keyCode === 229) return;
+		window.setTimeout(() => {
+			const word = searchExtensionInput.value.toLowerCase();
+			showCandidate(word);
+			openIfNarrowOnlyOne();
+		}, 1);
+	});
 
 	// 初回表示時
 	showCandidate("");
