@@ -13,10 +13,10 @@ chrome.management.getAll(extensions => {
 	});
 
 	extensions.forEach(extension => {
+		const li = document.createElement("li");
 		const elem = document.createElement("a");
 		elem.innerText = extension.name;
 		elem.href = "#";
-		elem.style.display = "block";
 		const openExtensionPage = () => {
 			chrome.tabs.create({
 				url: "chrome://extensions/?id=" + extension.id
@@ -34,8 +34,9 @@ chrome.management.getAll(extensions => {
 			elem.style.textDecoration = "line-through";
 			elem.title = "無効";
 		}
-		container.appendChild(elem);
-		extension._elem = elem;
+		li.appendChild(elem);
+		container.appendChild(li);
+		extension._elem = li;
 	});
 
 	function showCandidate({
@@ -46,7 +47,7 @@ chrome.management.getAll(extensions => {
 		extensions.forEach(extension => {
 			const target = extension.name + "\n" + extension.description;
 			if (target.toLowerCase().indexOf(word) !== -1) {
-				extension._elem.style.display = "block";
+				extension._elem.style.display = "";
 				matchedExtensionIds.push(extension.id);
 			} else {
 				extension._elem.style.display = "none";
