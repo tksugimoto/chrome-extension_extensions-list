@@ -16,6 +16,7 @@ chrome.management.getAll(extensions => {
 		const li = document.createElement("li");
 		const elem = document.createElement("a");
 		elem.innerText = extension.name;
+		elem.title = extension.description;
 		elem.href = "#";
 		const openExtensionPage = () => {
 			chrome.tabs.create({
