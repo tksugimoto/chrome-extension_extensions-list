@@ -37,7 +37,7 @@ chrome.management.getAll(extensions => {
 		if (!extension.enabled) {
 			elem.style.color = "gray";
 			elem.style.textDecoration = "line-through";
-			elem.title = "無効";
+			li.appendChild(document.createTextNode("（無効）"));
 		}
 		li.appendChild(elem);
 		container.appendChild(li);
