@@ -1,9 +1,9 @@
 
 
 
-var KEY_ID_CONTEXT_MENU_ALL = "a";
-var KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE = "b";
-var KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE = "c";
+const KEY_ID_CONTEXT_MENU_ALL = "a";
+const KEY_ID_CONTEXT_MENU_NOT_HAS_OPTION_PAGE = "b";
+const KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE = "c";
 
 
 chrome.runtime.onInstalled.addListener(readyToCreate);
@@ -26,7 +26,7 @@ chrome.management.onDisabled.addListener(function (extensionInfo){
 	readyToCreate();
 });
 
-var timeoutId = null;
+let timeoutId = null;
 function readyToCreate(){
 	if (timeoutId !== null) {
 		window.clearTimeout(timeoutId);
@@ -34,8 +34,8 @@ function readyToCreate(){
 	timeoutId = window.setTimeout(createMenu, 100);
 }
 function createMenu (){
-	var count = (function () {
-		var i = 0;
+	const count = (function () {
+		let i = 0;
 		return function () {
 			return i++;
 		}
@@ -98,7 +98,7 @@ chrome.contextMenus.onClicked.addListener(function (info) {
 			url: "chrome://extensions/"
 		});
 	} else if (info.menuItemId.match(/^EXT_([a-z]+)_/)) {
-		var extensionId = RegExp.$1;
+		const extensionId = RegExp.$1;
 		chrome.tabs.create({
 			url: "chrome://extensions/?id=" + extensionId
 		});
