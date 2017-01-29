@@ -6,6 +6,13 @@
 		body {
 			width: 350px;
 		}
+		.disabled:before {
+			content: "（無効）";
+		}
+		.disabled a {
+			color: gray;
+			text-decoration: line-through;
+		}
 	</style>
 	<link rel="import" href="/web-components/check-box.html">
 </head>

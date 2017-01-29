@@ -47,9 +47,7 @@ chrome.management.getAll(extensions => {
 			}
 		});
 		if (!extension.enabled) {
-			elem.style.color = "gray";
-			elem.style.textDecoration = "line-through";
-			li.appendChild(document.createTextNode("（無効）"));
+			li.classList.add("disabled");
 		}
 		li.appendChild(elem);
 		container.appendChild(li);
