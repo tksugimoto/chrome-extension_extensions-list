@@ -1,5 +1,16 @@
 "use strict";
 
+{
+	const key = "enable_open_if_candidate_only_one";
+	window.enableOpenIfCandidateOnlyOne = localStorage[key] !== "false";
+
+	const checkBox = document.getElementById("enable_open_if_candidate_only_one");
+	checkBox.checked = enableOpenIfCandidateOnlyOne;
+	checkBox.addEventListener("change", evt => {
+		enableOpenIfCandidateOnlyOne = evt.checked;
+		localStorage[key] = enableOpenIfCandidateOnlyOne;
+	});
+}
 const container = document.getElementById("container");
 
 const searchExtensionInput = document.getElementById("search-extension");
@@ -59,6 +70,9 @@ chrome.management.getAll(extensions => {
 				extension._elem.style.display = "none";
 			}
 		});
+		if (!enableOpenIfCandidateOnlyOne) {
+			openIfCandidateOnlyOne = false;
+		}
 		if (openIfCandidateOnlyOne && matchedExtensionIds.length === 1) {
 			chrome.tabs.create({
 				url: "chrome://extensions/?id=" + matchedExtensionIds[0]
