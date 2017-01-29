@@ -47,7 +47,7 @@ chrome.management.getAll(extensions => {
 
 	function showCandidate({
 		word = searchExtensionInput.value.toLowerCase(),
-		openIfNarrowOnlyOne = false
+		openIfCandidateOnlyOne = false
 	} = {}) {
 		const matchedExtensionIds = [];
 		extensions.forEach(extension => {
@@ -59,7 +59,7 @@ chrome.management.getAll(extensions => {
 				extension._elem.style.display = "none";
 			}
 		});
-		if (openIfNarrowOnlyOne && matchedExtensionIds.length === 1) {
+		if (openIfCandidateOnlyOne && matchedExtensionIds.length === 1) {
 			chrome.tabs.create({
 				url: "chrome://extensions/?id=" + matchedExtensionIds[0]
 			});
@@ -70,7 +70,7 @@ chrome.management.getAll(extensions => {
 		// 日本語変換中
 		window.setTimeout(() => {
 			showCandidate({
-				openIfNarrowOnlyOne: false
+				openIfCandidateOnlyOne: false
 			});
 		}, 1);
 	});
@@ -78,7 +78,7 @@ chrome.management.getAll(extensions => {
 		// 日本語変換完了・変換キャンセル
 		window.setTimeout(() => {
 			showCandidate({
-				openIfNarrowOnlyOne: true
+				openIfCandidateOnlyOne: true
 			});
 		}, 1);
 	});
@@ -89,7 +89,7 @@ chrome.management.getAll(extensions => {
 		if (evt.keyCode === 229) return;
 		window.setTimeout(() => {
 			showCandidate({
-				openIfNarrowOnlyOne: true
+				openIfCandidateOnlyOne: true
 			});
 		}, 1);
 	});
