@@ -58,6 +58,21 @@ chrome.management.getAll(extensions => {
 		extension._elem = li;
 	});
 
+	chrome.management.onEnabled.addListener(extensionInfo => {
+		extensions.filter(({id}) => {
+			return id === extensionInfo.id
+		}).forEach(({_elem}) => {
+			_elem.classList.remove("disabled");
+		});
+	});
+	chrome.management.onDisabled.addListener(extensionInfo => {
+		extensions.filter(({id}) => {
+			return id === extensionInfo.id
+		}).forEach(({_elem}) => {
+			_elem.classList.add("disabled");
+		});
+	});
+
 	function showCandidate({
 		word = searchExtensionInput.value.toLowerCase(),
 		openIfCandidateOnlyOne = false
