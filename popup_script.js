@@ -41,9 +41,13 @@ chrome.management.getAll(extensions => {
 				openExtensionPage();
 			} else if (evt.key === "r") {
 				// rキーで拡張をリロード
-				chrome.management.setEnabled(extension.id, false, () => {
-					chrome.management.setEnabled(extension.id, true);
-				});
+				if (extension.id === chrome.runtime.id) {
+					chrome.runtime.reload();
+				} else {
+					chrome.management.setEnabled(extension.id, false, () => {
+						chrome.management.setEnabled(extension.id, true);
+					});
+				}
 			}
 		});
 		if (!extension.enabled) {
