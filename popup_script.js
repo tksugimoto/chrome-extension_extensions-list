@@ -39,6 +39,9 @@ chrome.management.getAll(extensions => {
 			if (evt.key === " ") {
 				// Spaceキーでも開く
 				openExtensionPage();
+			} else if (evt.key === "d") {
+				// dキーで拡張を無効化
+				chrome.management.setEnabled(extension.id, false);
 			} else if (evt.key === "r") {
 				// rキーで拡張をリロード
 				if (extension.id === chrome.runtime.id) {
