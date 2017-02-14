@@ -1,4 +1,7 @@
 
+chrome.browserAction.setBadgeText({
+	text: "ext"
+});
 
 
 const KEY_ID_CONTEXT_MENU_ALL = "a";
