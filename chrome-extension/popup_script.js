@@ -81,9 +81,14 @@ chrome.management.getAll(extensions => {
 		openIfCandidateOnlyOne = false
 	} = {}) {
 		const matchedExtensionIds = [];
+		// 半角スペースか全角スペース区切りでAND検索
+		const words = word.split(/ |　/g);
+		const isMatch = text => {
+			return words.every(w => text.includes(w));
+		};
 		extensions.forEach(extension => {
 			const target = extension.name + "\n" + extension.description;
-			if (target.toLowerCase().indexOf(word) !== -1) {
+			if (isMatch(target.toLowerCase())) {
 				extension._elem.style.display = "";
 				matchedExtensionIds.push(extension.id);
 			} else {
