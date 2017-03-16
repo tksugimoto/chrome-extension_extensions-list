@@ -4,7 +4,7 @@ chrome.browserAction.setBadgeText({
 });
 
 
-const KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE = "c";
+const KEY_ID_CONTEXT_MENU_OPEN_EXT_PAGE = "open_ext_page";
 
 chrome.contextMenus.create({
 	title: "拡張ページを表示",
