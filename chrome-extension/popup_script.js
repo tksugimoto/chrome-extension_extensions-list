@@ -36,18 +36,19 @@ chrome.management.getAll(extensions => {
 		};
 		elem.onclick = openExtensionPage;
 		elem.addEventListener("keydown", evt => {
-			if (evt.key === " ") {
+			const key = evt.key.toLowerCase();
+			if (key === " ") {
 				// Spaceキーでも開く
 				openExtensionPage();
-			} else if (extension.optionsUrl && evt.key === "o") {
+			} else if (extension.optionsUrl && key === "o") {
 				// oキーでオプションページを開く
 				chrome.tabs.create({
 					url: extension.optionsUrl
 				});
-			} else if (evt.key === "d") {
+			} else if (key === "d") {
 				// dキーで拡張を無効化
 				chrome.management.setEnabled(extension.id, false);
-			} else if (evt.key === "r") {
+			} else if (key === "r") {
 				// rキーで拡張をリロード
 				if (extension.id === chrome.runtime.id) {
 					chrome.runtime.reload();
