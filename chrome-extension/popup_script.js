@@ -73,15 +73,17 @@ chrome.management.getAll(extensions => {
 	chrome.management.onEnabled.addListener(extensionInfo => {
 		extensions.filter(({id}) => {
 			return id === extensionInfo.id
-		}).forEach(({_elem}) => {
-			_elem.classList.remove("disabled");
+		}).forEach(extension => {
+			extension.enabled = true;
+			extension._elem.classList.remove("disabled");
 		});
 	});
 	chrome.management.onDisabled.addListener(extensionInfo => {
 		extensions.filter(({id}) => {
 			return id === extensionInfo.id
-		}).forEach(({_elem}) => {
-			_elem.classList.add("disabled");
+		}).forEach(extension => {
+			extension.enabled = false;
+			extension._elem.classList.add("disabled");
 		});
 	});
 
