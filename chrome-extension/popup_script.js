@@ -39,6 +39,11 @@ chrome.management.getAll(extensions => {
 			if (evt.key === " ") {
 				// Spaceキーでも開く
 				openExtensionPage();
+			} else if (extension.optionsUrl && evt.key === "o") {
+				// oキーでオプションページを開く
+				chrome.tabs.create({
+					url: extension.optionsUrl
+				});
 			} else if (evt.key === "d") {
 				// dキーで拡張を無効化
 				chrome.management.setEnabled(extension.id, false);
@@ -53,6 +58,9 @@ chrome.management.getAll(extensions => {
 				}
 			}
 		});
+		if (extension.optionsUrl) {
+			li.classList.add("has-options_page");
+		}
 		if (!extension.enabled) {
 			li.classList.add("disabled");
 		}
