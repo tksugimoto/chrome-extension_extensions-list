@@ -36,13 +36,21 @@ chrome.management.getAll(extensions => {
 		};
 		elem.onclick = openExtensionPage;
 		elem.addEventListener("keydown", evt => {
-			if (evt.key === " ") {
+			const key = evt.key.toLowerCase();
+			if (key === " ") {
 				// Spaceキーでも開く
 				openExtensionPage();
-			} else if (evt.key === "d") {
+			} else if (key === "o") {
+				// oキーでオプションページを開く
+				if (!extension.enabled) return;
+				if (!extension.optionsUrl) return;
+				chrome.tabs.create({
+					url: extension.optionsUrl
+				});
+			} else if (key === "d") {
 				// dキーで拡張を無効化
 				chrome.management.setEnabled(extension.id, false);
-			} else if (evt.key === "r") {
+			} else if (key === "r") {
 				// rキーで拡張をリロード
 				if (extension.id === chrome.runtime.id) {
 					chrome.runtime.reload();
@@ -53,6 +61,9 @@ chrome.management.getAll(extensions => {
 				}
 			}
 		});
+		if (extension.optionsUrl) {
+			li.classList.add("has-options_page");
+		}
 		if (!extension.enabled) {
 			li.classList.add("disabled");
 		}
@@ -64,15 +75,17 @@ chrome.management.getAll(extensions => {
 	chrome.management.onEnabled.addListener(extensionInfo => {
 		extensions.filter(({id}) => {
 			return id === extensionInfo.id
-		}).forEach(({_elem}) => {
-			_elem.classList.remove("disabled");
+		}).forEach(extension => {
+			extension.enabled = true;
+			extension._elem.classList.remove("disabled");
 		});
 	});
 	chrome.management.onDisabled.addListener(extensionInfo => {
 		extensions.filter(({id}) => {
 			return id === extensionInfo.id
-		}).forEach(({_elem}) => {
-			_elem.classList.add("disabled");
+		}).forEach(extension => {
+			extension.enabled = false;
+			extension._elem.classList.add("disabled");
 		});
 	});
 

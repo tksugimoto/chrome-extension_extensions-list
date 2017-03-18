@@ -11,15 +11,17 @@
 		}
 		.disabled a {
 			color: gray;
-			text-decoration: line-through;
 		}
 		#container a:focus:after {
-			content: "R キーで更新, Dキーで無効化";
-			margin-left: 10px;
+			content: "R キーで更新\A Dキーで無効化";
+			padding-left: 10px;
 			color: red;
 			text-decoration: none;
-			display: inline-block;
-			height: 1em;
+			display: block;
+			white-space: pre;
+		}
+		#container .has-options_page a:focus:after {
+			content: "R キーで更新\A Dキーで無効化\A Oキーでオプションページを開く";
 		}
 		#container .disabled a:focus:after {
 			content: "R キーで有効化";
