@@ -17,9 +17,12 @@ const searchExtensionInput = document.getElementById("search-extension");
 searchExtensionInput.focus();
 
 chrome.management.getAll(extensions => {
+	extensions.forEach(extension => {
+		extension._lowerCasedShortName = extension.shortName.toLowerCase();
+	});
 	extensions.sort((a, b) => {
-		if (a.shortName > b.shortName) return 1;
-		if (a.shortName < b.shortName) return -1;
+		if (a._lowerCasedShortName > b._lowerCasedShortName) return 1;
+		if (a._lowerCasedShortName < b._lowerCasedShortName) return -1;
 		return 0;
 	});
 
