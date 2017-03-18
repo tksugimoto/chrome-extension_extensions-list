@@ -40,8 +40,10 @@ chrome.management.getAll(extensions => {
 			if (key === " ") {
 				// Spaceキーでも開く
 				openExtensionPage();
-			} else if (extension.optionsUrl && key === "o") {
+			} else if (key === "o") {
 				// oキーでオプションページを開く
+				if (!extension.enabled) return;
+				if (!extension.optionsUrl) return;
 				chrome.tabs.create({
 					url: extension.optionsUrl
 				});
