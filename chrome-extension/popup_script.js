@@ -52,9 +52,11 @@ chrome.management.getAll(extensions => {
 				});
 			} else if (key === "d") {
 				// dキーで拡張を無効化
+				if (!extension.mayDisable) return;
 				chrome.management.setEnabled(extension.id, false);
 			} else if (key === "r") {
 				// rキーで拡張をリロード
+				if (!extension.mayDisable) return;
 				if (extension.id === chrome.runtime.id) {
 					chrome.runtime.reload();
 				} else {
