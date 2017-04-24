@@ -72,6 +72,9 @@ chrome.management.getAll(extensions => {
 		if (!extension.enabled) {
 			li.classList.add("disabled");
 		}
+		if (!extension.mayDisable) {
+			li.classList.add("controlled");
+		}
 		li.appendChild(elem);
 		container.appendChild(li);
 		extension._elem = li;
