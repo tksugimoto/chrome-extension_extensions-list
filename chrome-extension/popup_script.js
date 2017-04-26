@@ -95,10 +95,10 @@ chrome.management.getAll(extensions => {
 		}
 	});
 
-	function showCandidate({
+	const showCandidate = ({
 		word = searchExtensionInput.value.toLowerCase(),
 		openIfCandidateOnlyOne = false
-	} = {}) {
+	} = {}) => {
 		const matchedExtensionIds = [];
 		// 半角スペースか全角スペース区切りでAND検索
 		const words = word.split(/ |　/g);
