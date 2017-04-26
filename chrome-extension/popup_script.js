@@ -80,27 +80,25 @@ chrome.management.getAll(extensions => {
 		extension._elem = li;
 	});
 
-	chrome.management.onEnabled.addListener(extensionInfo => {
-		extensions.filter(({id}) => {
-			return id === extensionInfo.id
-		}).forEach(extension => {
+	chrome.management.onEnabled.addListener(enabledExtension => {
+		const extension = extensions.find(({id}) => id === enabledExtension.id);
+		if (extension) {
 			extension.enabled = true;
 			extension._elem.classList.remove("disabled");
-		});
+		}
 	});
-	chrome.management.onDisabled.addListener(extensionInfo => {
-		extensions.filter(({id}) => {
-			return id === extensionInfo.id
-		}).forEach(extension => {
+	chrome.management.onDisabled.addListener(disabledExtension => {
+		const extension = extensions.find(({id}) => id === disabledExtension.id);
+		if (extension) {
 			extension.enabled = false;
 			extension._elem.classList.add("disabled");
-		});
+		}
 	});
 
-	function showCandidate({
+	const showCandidate = ({
 		word = searchExtensionInput.value.toLowerCase(),
 		openIfCandidateOnlyOne = false
-	} = {}) {
+	} = {}) => {
 		const matchedExtensionIds = [];
 		// 半角スペースか全角スペース区切りでAND検索
 		const words = word.split(/ |　/g);
