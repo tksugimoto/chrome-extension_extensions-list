@@ -81,20 +81,18 @@ chrome.management.getAll(extensions => {
 	});
 
 	chrome.management.onEnabled.addListener(enabledExtension => {
-		extensions.filter(({id}) => {
-			return id === enabledExtension.id
-		}).forEach(extension => {
+		const extension = extensions.find(({id}) => id === enabledExtension.id);
+		if (extension) {
 			extension.enabled = true;
 			extension._elem.classList.remove("disabled");
-		});
+		}
 	});
 	chrome.management.onDisabled.addListener(disabledExtension => {
-		extensions.filter(({id}) => {
-			return id === disabledExtension.id
-		}).forEach(extension => {
+		const extension = extensions.find(({id}) => id === disabledExtension.id);
+		if (extension) {
 			extension.enabled = false;
 			extension._elem.classList.add("disabled");
-		});
+		}
 	});
 
 	function showCandidate({
