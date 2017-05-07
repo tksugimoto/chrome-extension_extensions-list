@@ -61,11 +61,22 @@ chrome.management.getAll(extensions => {
 					chrome.runtime.reload();
 				} else {
 					chrome.management.setEnabled(extension.id, false, () => {
-						chrome.management.setEnabled(extension.id, true);
+						chrome.management.setEnabled(extension.id, true, notifyReload);
 					});
 				}
 			}
 		});
+		const notifyReload = () => {
+			const duration = 2;
+			const notification = document.createElement("span");
+			notification.innerText = "更新完了！";
+			notification.classList.add("reloaded-notification");
+			notification.classList.add(`fadeout-${duration}s`);
+			li.appendChild(notification);
+			setTimeout(() => {
+				li.removeChild(notification);
+			}, duration * 1000);
+		};
 		if (extension.optionsUrl) {
 			li.classList.add("has-options_page");
 		}
