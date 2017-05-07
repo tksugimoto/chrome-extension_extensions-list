@@ -36,6 +36,21 @@
 		#container .controlled.has-options_page a:focus:after {
 			content: "管理されているためユーザーによる無効化は不可\A Oキーでオプションページを開く";
 		}
+		.reloaded-notification {
+			color: orange;
+		}
+		.fadeout-2s {
+			animation: fadeout 2s ease-in 0s 1 normal;
+			opacity: 0;
+		}
+		@keyframes fadeout {
+			0% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0;
+			}
+		}
 	</style>
 	<link rel="import" href="/web-components/check-box.html">
 </head>
