@@ -1,8 +1,10 @@
 'use strict';
 
+let enableOpenIfCandidateOnlyOne;
+
 {
 	const key = 'enable_open_if_candidate_only_one';
-	window.enableOpenIfCandidateOnlyOne = localStorage[key] !== 'false';
+	enableOpenIfCandidateOnlyOne = localStorage[key] !== 'false';
 
 	const checkBox = document.getElementById('enable_open_if_candidate_only_one');
 	checkBox.checked = enableOpenIfCandidateOnlyOne;
