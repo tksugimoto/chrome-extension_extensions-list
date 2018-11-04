@@ -88,6 +88,9 @@ chrome.management.getAll(extensions => {
 		if (!extension.mayDisable) {
 			li.classList.add('controlled');
 		}
+		if (extension.installType === chrome.management.ExtensionInstallType.NORMAL) {
+			li.classList.add('installed-from-store');
+		}
 		li.appendChild(elem);
 		container.appendChild(li);
 		extension._elem = li;
