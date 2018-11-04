@@ -133,7 +133,7 @@ chrome.management.getAll(extensions => {
 				url: 'chrome://extensions/?id=' + matchedExtensionIds[0],
 			});
 		}
-	}
+	};
 
 	searchExtensionInput.addEventListener('compositionupdate', () => {
 		// 日本語変換中
