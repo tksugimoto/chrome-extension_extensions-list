@@ -1,19 +1,21 @@
-"use strict";
+'use strict';
+
+let enableOpenIfCandidateOnlyOne;
 
 {
-	const key = "enable_open_if_candidate_only_one";
-	window.enableOpenIfCandidateOnlyOne = localStorage[key] !== "false";
+	const key = 'enable_open_if_candidate_only_one';
+	enableOpenIfCandidateOnlyOne = localStorage[key] !== 'false';
 
-	const checkBox = document.getElementById("enable_open_if_candidate_only_one");
+	const checkBox = document.getElementById('enable_open_if_candidate_only_one');
 	checkBox.checked = enableOpenIfCandidateOnlyOne;
-	checkBox.addEventListener("change", evt => {
+	checkBox.addEventListener('change', evt => {
 		enableOpenIfCandidateOnlyOne = evt.checked;
 		localStorage[key] = enableOpenIfCandidateOnlyOne;
 	});
 }
-const container = document.getElementById("container");
+const container = document.getElementById('container');
 
-const searchExtensionInput = document.getElementById("search-extension");
+const searchExtensionInput = document.getElementById('search-extension');
 searchExtensionInput.focus();
 
 chrome.management.getAll(extensions => {
@@ -27,34 +29,34 @@ chrome.management.getAll(extensions => {
 	});
 
 	extensions.forEach(extension => {
-		const li = document.createElement("li");
-		const elem = document.createElement("a");
+		const li = document.createElement('li');
+		const elem = document.createElement('a');
 		elem.innerText = extension.name;
 		elem.title = extension.description;
-		elem.href = "#";
+		elem.href = '#';
 		const openExtensionPage = () => {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + extension.id
+				url: 'chrome://extensions/?id=' + extension.id,
 			});
 		};
 		elem.onclick = openExtensionPage;
-		elem.addEventListener("keydown", evt => {
+		elem.addEventListener('keydown', evt => {
 			const key = evt.key.toLowerCase();
-			if (key === " ") {
+			if (key === ' ') {
 				// Spaceキーでも開く
 				openExtensionPage();
-			} else if (key === "o") {
+			} else if (key === 'o') {
 				// oキーでオプションページを開く
 				if (!extension.enabled) return;
 				if (!extension.optionsUrl) return;
 				chrome.tabs.create({
-					url: extension.optionsUrl
+					url: extension.optionsUrl,
 				});
-			} else if (key === "d") {
+			} else if (key === 'd') {
 				// dキーで拡張を無効化
 				if (!extension.mayDisable) return;
 				chrome.management.setEnabled(extension.id, false);
-			} else if (key === "r") {
+			} else if (key === 'r') {
 				// rキーで拡張をリロード
 				if (!extension.mayDisable) return;
 				if (extension.id === chrome.runtime.id) {
@@ -68,9 +70,9 @@ chrome.management.getAll(extensions => {
 		});
 		const notifyReload = () => {
 			const duration = 2;
-			const notification = document.createElement("span");
-			notification.innerText = "更新完了！";
-			notification.classList.add("reloaded-notification");
+			const notification = document.createElement('span');
+			notification.innerText = '更新完了！';
+			notification.classList.add('reloaded-notification');
 			notification.classList.add(`fadeout-${duration}s`);
 			li.appendChild(notification);
 			setTimeout(() => {
@@ -78,13 +80,13 @@ chrome.management.getAll(extensions => {
 			}, duration * 1000);
 		};
 		if (extension.optionsUrl) {
-			li.classList.add("has-options_page");
+			li.classList.add('has-options_page');
 		}
 		if (!extension.enabled) {
-			li.classList.add("disabled");
+			li.classList.add('disabled');
 		}
 		if (!extension.mayDisable) {
-			li.classList.add("controlled");
+			li.classList.add('controlled');
 		}
 		li.appendChild(elem);
 		container.appendChild(li);
@@ -95,20 +97,20 @@ chrome.management.getAll(extensions => {
 		const extension = extensions.find(({id}) => id === enabledExtension.id);
 		if (extension) {
 			extension.enabled = true;
-			extension._elem.classList.remove("disabled");
+			extension._elem.classList.remove('disabled');
 		}
 	});
 	chrome.management.onDisabled.addListener(disabledExtension => {
 		const extension = extensions.find(({id}) => id === disabledExtension.id);
 		if (extension) {
 			extension.enabled = false;
-			extension._elem.classList.add("disabled");
+			extension._elem.classList.add('disabled');
 		}
 	});
 
 	const showCandidate = ({
 		word = searchExtensionInput.value.toLowerCase(),
-		openIfCandidateOnlyOne = false
+		openIfCandidateOnlyOne = false,
 	} = {}) => {
 		const matchedExtensionIds = [];
 		// 半角スペースか全角スペース区切りでAND検索
@@ -117,12 +119,12 @@ chrome.management.getAll(extensions => {
 			return words.every(w => text.includes(w));
 		};
 		extensions.forEach(extension => {
-			const target = extension.name + "\n" + extension.description;
+			const target = extension.name + '\n' + extension.description;
 			if (isMatch(target.toLowerCase())) {
-				extension._elem.style.display = "";
+				extension._elem.style.display = '';
 				matchedExtensionIds.push(extension.id);
 			} else {
-				extension._elem.style.display = "none";
+				extension._elem.style.display = 'none';
 			}
 		});
 		if (!enableOpenIfCandidateOnlyOne) {
@@ -130,35 +132,35 @@ chrome.management.getAll(extensions => {
 		}
 		if (openIfCandidateOnlyOne && matchedExtensionIds.length === 1) {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + matchedExtensionIds[0]
+				url: 'chrome://extensions/?id=' + matchedExtensionIds[0],
 			});
 		}
-	}
+	};
 
-	searchExtensionInput.addEventListener("compositionupdate", () => {
+	searchExtensionInput.addEventListener('compositionupdate', () => {
 		// 日本語変換中
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: false
+				openIfCandidateOnlyOne: false,
 			});
 		}, 1);
 	});
-	searchExtensionInput.addEventListener("compositionend", () => {
+	searchExtensionInput.addEventListener('compositionend', () => {
 		// 日本語変換完了・変換キャンセル
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: true
+				openIfCandidateOnlyOne: true,
 			});
 		}, 1);
 	});
-	searchExtensionInput.addEventListener("keydown", evt => {
+	searchExtensionInput.addEventListener('keydown', evt => {
 		// Tabキー
 		if (evt.keyCode === 9) return;
 		// 日本語入力中
 		if (evt.keyCode === 229) return;
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: true
+				openIfCandidateOnlyOne: true,
 			});
 		}, 1);
 	});
