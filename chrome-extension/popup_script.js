@@ -34,7 +34,7 @@ chrome.management.getAll(extensions => {
 		elem.href = "#";
 		const openExtensionPage = () => {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + extension.id
+				url: "chrome://extensions/?id=" + extension.id,
 			});
 		};
 		elem.onclick = openExtensionPage;
@@ -48,7 +48,7 @@ chrome.management.getAll(extensions => {
 				if (!extension.enabled) return;
 				if (!extension.optionsUrl) return;
 				chrome.tabs.create({
-					url: extension.optionsUrl
+					url: extension.optionsUrl,
 				});
 			} else if (key === "d") {
 				// dキーで拡張を無効化
@@ -108,7 +108,7 @@ chrome.management.getAll(extensions => {
 
 	const showCandidate = ({
 		word = searchExtensionInput.value.toLowerCase(),
-		openIfCandidateOnlyOne = false
+		openIfCandidateOnlyOne = false,
 	} = {}) => {
 		const matchedExtensionIds = [];
 		// 半角スペースか全角スペース区切りでAND検索
@@ -130,7 +130,7 @@ chrome.management.getAll(extensions => {
 		}
 		if (openIfCandidateOnlyOne && matchedExtensionIds.length === 1) {
 			chrome.tabs.create({
-				url: "chrome://extensions/?id=" + matchedExtensionIds[0]
+				url: "chrome://extensions/?id=" + matchedExtensionIds[0],
 			});
 		}
 	}
@@ -139,7 +139,7 @@ chrome.management.getAll(extensions => {
 		// 日本語変換中
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: false
+				openIfCandidateOnlyOne: false,
 			});
 		}, 1);
 	});
@@ -147,7 +147,7 @@ chrome.management.getAll(extensions => {
 		// 日本語変換完了・変換キャンセル
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: true
+				openIfCandidateOnlyOne: true,
 			});
 		}, 1);
 	});
@@ -158,7 +158,7 @@ chrome.management.getAll(extensions => {
 		if (evt.keyCode === 229) return;
 		window.setTimeout(() => {
 			showCandidate({
-				openIfCandidateOnlyOne: true
+				openIfCandidateOnlyOne: true,
 			});
 		}, 1);
 	});
