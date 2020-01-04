@@ -1,5 +1,7 @@
 'use strict';
 
+import './web-components/check-box.js';
+
 let enableOpenIfCandidateOnlyOne;
 
 {
