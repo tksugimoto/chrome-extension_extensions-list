@@ -93,6 +93,12 @@ chrome.management.getAll(extensions => {
 		if (extension.installType === chrome.management.ExtensionInstallType.NORMAL) {
 			li.classList.add('installed-from-store');
 		}
+		if (extension.icons) {
+			const img = document.createElement('img');
+			img.src = extension.icons[0].url;
+			img.classList.add('icon');
+			li.append(img);
+		}
 		li.appendChild(elem);
 		container.appendChild(li);
 		extension._elem = li;
