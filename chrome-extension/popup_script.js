@@ -125,7 +125,7 @@ chrome.management.getAll(extensions => {
 		};
 		extensions.forEach(extension => {
 			const target = extension.name + '\n' + extension.description;
-			if (isMatch(target.toLowerCase())) {
+			if (isMatch(target.toLowerCase()) || isMatch(extension.id)) {
 				extension._elem.style.display = '';
 				matchedExtensionIds.push(extension.id);
 			} else {
