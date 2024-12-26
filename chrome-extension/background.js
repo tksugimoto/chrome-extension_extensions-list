@@ -1,5 +1,5 @@
 
-chrome.browserAction.setBadgeText({
+chrome.action.setBadgeText({
 	text: 'ext',
 });
 

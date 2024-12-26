@@ -1,7 +1,7 @@
 {
 	"name": "Extension list",
 	"version": "0.2",
-	"manifest_version": 2,
+	"manifest_version": 3,
 
 	"description": "拡張を一覧表示/検索/更新/有効化/無効化する",
 
@@ -11,21 +11,18 @@
 	],
 
 	"background": {
-		"scripts": [
-			"background.js"
-		]
-		,"persistent": false
+		"service_worker": "background.js"
 	},
 
 	"commands": {
-		"_execute_browser_action": {
+		"_execute_action": {
 			"suggested_key": {
 				"default": "Ctrl+Shift+E"
 			}
 		}
 	},
-	
-	"browser_action": {
+
+	"action": {
 		"default_title": "拡張ボタン表示",
 		"default_popup": "popup.html"
 	}
